@@ -11,6 +11,7 @@ public class TetriMino {
     public Block b[] = new Block[4];
     public Block tempB[] = new Block[4];
     int autoDropCounter = 0;
+    int direction = 1; // 1: up, 2:rotate to the right, 3:downwards, 4:to the left
 
     public void create(Color c) {
         b[0] = new Block(c);
@@ -25,7 +26,21 @@ public class TetriMino {
     }
 
     public void setXY(int x, int y) {}
-    public void updateXY(int direction){}
+    public void updateXY(int direction) {
+        this.direction = direction;
+        b[0].x = tempB[0].x;
+        b[0].y = tempB[0].y;
+        b[1].x = tempB[1].x;
+        b[1].y = tempB[1].y;
+        b[2].x = tempB[2].x;
+        b[2].y = tempB[2].y;
+        b[3].x = tempB[3].x;
+        b[3].y = tempB[3].y;
+    }
+    public void getDirection1() {}
+    public void getDirection2() {}
+    public void getDirection3() {}
+    public void getDirection4() {}
     public void update() {
         // Move the mino
         moveMino();
@@ -48,8 +63,7 @@ public class TetriMino {
             autoDropCounter = 0;
             KeyHandler.downPressed = false;
         } else if (KeyHandler.upPressed) {
-            moveUp();
-            autoDropCounter = 0;
+            changeMinoDirection();
             KeyHandler.upPressed = false;
         } else if (KeyHandler.leftPressed) {
             moveLeft();
@@ -62,6 +76,15 @@ public class TetriMino {
         }
     }
 
+    public void changeMinoDirection() {
+        System.out.println("direction " + direction);
+        switch (direction) {
+            case 1: getDirection2();break;
+            case 2: getDirection3();break;
+            case 3: getDirection4();break;
+            case 4: getDirection1();break;
+        }
+    }
     public void moveDown() {
         b[0].y += Block.SIZE;
         b[1].y += Block.SIZE;
