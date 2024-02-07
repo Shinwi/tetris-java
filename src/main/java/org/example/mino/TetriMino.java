@@ -27,6 +27,7 @@ public class TetriMino {
 
     public void setXY(int x, int y) {}
     public void updateXY(int direction) {
+        System.out.println("new direction " + direction);
         this.direction = direction;
         b[0].x = tempB[0].x;
         b[0].y = tempB[0].y;
@@ -65,6 +66,7 @@ public class TetriMino {
         } else if (KeyHandler.upPressed) {
             changeMinoDirection();
             KeyHandler.upPressed = false;
+            System.out.println("upPressed " + KeyHandler.upPressed);
         } else if (KeyHandler.leftPressed) {
             moveLeft();
             autoDropCounter = 0;

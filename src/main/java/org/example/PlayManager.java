@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.mino.Mino_L1;
+import org.example.mino.Mino_L2;
 import org.example.mino.TetriMino;
 
 import java.awt.*;
@@ -29,7 +30,9 @@ public class PlayManager {
 
         MINO_START_X = left_x + (WIDTH/2) - Block.SIZE;
         MINO_START_Y = top_y + Block.SIZE;
-        currentMino = new Mino_L1();
+
+        // TODO: randomize the choice of the mino
+        currentMino = new Mino_L2(); // new Mino_L1();
         currentMino.setXY(MINO_START_X, MINO_START_Y);
     }
 
