@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.mino.KeyHandler;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,9 +13,14 @@ public class GamePanel extends JPanel implements Runnable {
     PlayManager pm;
 
     public GamePanel(){
+        // Panel settings
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
         this.setLayout(null);
+
+        // Key listener implementation
+        this.addKeyListener(new KeyHandler());
+        this.setFocusable(true);
 
         pm = new PlayManager();
     }

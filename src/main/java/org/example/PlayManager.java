@@ -19,6 +19,8 @@ public class PlayManager {
     final int MINO_START_X;
     final int MINO_START_Y;
 
+    public static int dropInterval = 60; // tetris mino drops every 60 frames = 1 second
+
     public PlayManager() {
         left_x = 100; // (GamePanel.WIDTH/2) - (WIDTH/2);
         right_x = left_x + WIDTH;
