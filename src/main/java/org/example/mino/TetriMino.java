@@ -3,15 +3,14 @@ package org.example.mino;
 import org.example.Block;
 import org.example.PlayManager;
 
-import javax.swing.plaf.basic.BasicTreeUI;
 import java.awt.*;
-import java.security.Key;
 
 public class TetriMino {
     public Block b[] = new Block[4];
     public Block tempB[] = new Block[4];
     int autoDropCounter = 0;
     int direction = 1; // 1: up, 2:rotate to the right, 3:downwards, 4:to the left
+    boolean leftCollision, rightCollision, bottomCollision;
 
     public void create(Color c) {
         b[0] = new Block(c);
@@ -26,6 +25,7 @@ public class TetriMino {
     }
 
     public void setXY(int x, int y) {}
+
     public void updateXY(int direction) {
         this.direction = direction;
         b[0].x = tempB[0].x;
@@ -37,15 +37,39 @@ public class TetriMino {
         b[3].x = tempB[3].x;
         b[3].y = tempB[3].y;
     }
-    public void getDirection1() {}
-    public void getDirection2() {}
-    public void getDirection3() {}
-    public void getDirection4() {}
-    public void update() {
-        // Move the mino
-        moveMino();
 
+    public void checkMovementCollision() {
+        leftCollision = false;
+        rightCollision = false;
+        bottomCollision = false;
+
+        for (int i = 0; i < b.length ; i++) {
+            // left wall
+            if (b[i].x == PlayManager.left_x) leftCollision = true;
+            // right wall
+            if (b[i].x + Block.SIZE == PlayManager.right_x) rightCollision = true;
+            // bottom wall
+            if (b[i].y + Block.SIZE == PlayManager.bottom_y) bottomCollision = true;
+        }
+    }
+
+    public void checkRotationCollision() {}
+
+    public void getDirection1() {}
+
+    public void getDirection2() {}
+
+    public void getDirection3() {}
+
+    public void getDirection4() {}
+
+    public void update() {
+        checkMovementCollision();
+        moveMino();
         autoDropCounter++; // increases every frame
+        //        if (bottomCollision) autoDropCounter = 0;
+        //        else autoDropCounter++;
+
         if (autoDropCounter == PlayManager.dropInterval) {
             // move downwards by one block
             b[0].y += Block.SIZE;
@@ -59,19 +83,16 @@ public class TetriMino {
 
     public void moveMino() {
         if (KeyHandler.downPressed) {
-            moveDown();
-            autoDropCounter = 0;
+            if (!bottomCollision) moveDown();
             KeyHandler.downPressed = false;
         } else if (KeyHandler.upPressed) {
             changeMinoDirection();
             KeyHandler.upPressed = false;
         } else if (KeyHandler.leftPressed) {
-            moveLeft();
-            autoDropCounter = 0;
+            if (!leftCollision) moveLeft();
             KeyHandler.leftPressed = false;
         } else if (KeyHandler.rightPressed) {
-            moveRight();
-            autoDropCounter = 0;
+            if (!rightCollision) moveRight();
             KeyHandler.rightPressed = false;
         }
     }
@@ -84,24 +105,28 @@ public class TetriMino {
             case 4: getDirection1();break;
         }
     }
+
     public void moveDown() {
         b[0].y += Block.SIZE;
         b[1].y += Block.SIZE;
         b[2].y += Block.SIZE;
         b[3].y += Block.SIZE;
     }
+
     public void moveUp() {
         b[0].y -= Block.SIZE;
         b[1].y -= Block.SIZE;
         b[2].y -= Block.SIZE;
         b[3].y -= Block.SIZE;
     }
+
     public void moveRight() {
         b[0].x += Block.SIZE;
         b[1].x += Block.SIZE;
         b[2].x += Block.SIZE;
         b[3].x += Block.SIZE;
     }
+
     public void moveLeft() {
         b[0].x -= Block.SIZE;
         b[1].x -= Block.SIZE;
@@ -117,4 +142,5 @@ public class TetriMino {
         g2.fillRect(b[2].x + margin, b[2].y + margin, Block.SIZE - (margin*2), Block.SIZE - (margin*2));
         g2.fillRect(b[3].x + margin, b[3].y + margin, Block.SIZE - (margin*2), Block.SIZE - (margin*2));
     }
+
 }
