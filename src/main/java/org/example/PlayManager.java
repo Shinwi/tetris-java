@@ -1,11 +1,9 @@
 package org.example;
 
-import org.example.mino.Mino_L1;
-import org.example.mino.Mino_L2;
-import org.example.mino.Mino_T;
-import org.example.mino.TetriMino;
+import org.example.mino.*;
 
 import java.awt.*;
+import java.util.Random;
 
 public class PlayManager {
     // Main play area
@@ -23,6 +21,8 @@ public class PlayManager {
 
     public static int dropInterval = 60; // tetris mino drops every 60 frames = 1 second
 
+    public Random random = new Random();
+
     public PlayManager() {
         left_x = 100; // (GamePanel.WIDTH/2) - (WIDTH/2);
         right_x = left_x + WIDTH;
@@ -33,9 +33,22 @@ public class PlayManager {
         MINO_START_Y = top_y + Block.SIZE;
 
         // TODO: randomize the choice of the mino
-//        currentMino = new Mino_L2(); // new Mino_L1();
-        currentMino = new Mino_T();
+        currentMino = generateRandomMino();
         currentMino.setXY(MINO_START_X, MINO_START_Y);
+    }
+
+    public TetriMino generateRandomMino() {
+        int choice = new Random().nextInt(4);
+        TetriMino mino = null;
+        System.out.println("choice : " + choice);
+        // TODO: avoid generating the same mino 3 times in a row
+        switch (choice) {
+            case 0: mino = new Mino_L1();break; //  blue
+            case 1: mino = new Mino_L2();break; // yello
+            case 2: mino = new Mino_T();break;
+            case 3: mino = new Mino_cube();break;
+        }
+        return mino;
     }
 
     public void update() {
