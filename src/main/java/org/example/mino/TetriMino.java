@@ -11,6 +11,7 @@ public class TetriMino {
     int autoDropCounter = 0;
     int direction = 1; // 1: up, 2:rotate to the right, 3:downwards, 4:to the left
     boolean leftCollision, rightCollision, bottomCollision;
+    public boolean active = true;
 
     public void create(Color c) {
         b[0] = new Block(c);
@@ -78,19 +79,21 @@ public class TetriMino {
 
     public void update() {
         checkMovementCollision();
-        moveMino();
-        autoDropCounter++; // increases every frame
-        //        if (bottomCollision) autoDropCounter = 0;
-        //        else autoDropCounter++;
+        // moveMino();
+        if (bottomCollision) {
+            active = false;
+        } else {
+            moveMino();
+            autoDropCounter++;
+            if (autoDropCounter == PlayManager.dropInterval) {
+                // move downwards by one block
+                b[0].y += Block.SIZE;
+                b[1].y += Block.SIZE;
+                b[2].y += Block.SIZE;
+                b[3].y += Block.SIZE;
 
-        if (autoDropCounter == PlayManager.dropInterval) {
-            // move downwards by one block
-            b[0].y += Block.SIZE;
-            b[1].y += Block.SIZE;
-            b[2].y += Block.SIZE;
-            b[3].y += Block.SIZE;
-
-            autoDropCounter = 0;
+                autoDropCounter = 0;
+            }
         }
     }
 
