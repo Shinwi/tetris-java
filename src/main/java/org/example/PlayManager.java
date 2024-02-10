@@ -63,7 +63,21 @@ public class PlayManager {
     }
 
     public void update() {
-        currentMino.update();
+        if (!currentMino.active) {
+            // add mino to static blocks if not active
+            staticBlocks.add(currentMino.b[0]);
+            staticBlocks.add(currentMino.b[1]);
+            staticBlocks.add(currentMino.b[2]);
+            staticBlocks.add(currentMino.b[3]);
+
+            // replace currentMino with nextMino
+            currentMino = nextMino;
+            currentMino.setXY(MINO_START_X, MINO_START_Y);
+            nextMino = generateRandomMino();
+            nextMino.setXY(NEXTMINO_START_X, NEXTMINO_START_Y);
+        } else {
+            currentMino.update();
+        }
     }
     public void draw(Graphics2D g2) {
         g2.setColor(Color.white);
@@ -85,6 +99,11 @@ public class PlayManager {
 
         // Draw next Mino
         nextMino.draw(g2);
+
+        // Draw static blocks
+        for (int i = 0; i < staticBlocks.size() ; i++) {
+            staticBlocks.get(i).draw(g2);
+        }
 
         // Draw pause
         g2.setColor(Color.red);
