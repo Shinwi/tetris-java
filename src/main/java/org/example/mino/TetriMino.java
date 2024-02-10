@@ -101,7 +101,6 @@ public class TetriMino {
 
     public void update() {
         checkMovementCollision();
-        // moveMino();
         if (bottomCollision) {
             active = false;
         } else {
@@ -118,6 +117,7 @@ public class TetriMino {
             }
         }
     }
+
 
     public void moveMino() {
         if (KeyHandler.downPressed) {

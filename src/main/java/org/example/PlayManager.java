@@ -51,11 +51,10 @@ public class PlayManager {
     public TetriMino generateRandomMino() {
         int choice = new Random().nextInt(4);
         TetriMino mino = null;
-        System.out.println("choice : " + choice);
         // TODO: avoid generating the same mino 3 times in a row
         switch (choice) {
-            case 0: mino = new Mino_L1();break; //  blue
-            case 1: mino = new Mino_L2();break; // yello
+            case 0: mino = new Mino_L1();break;
+            case 1: mino = new Mino_L2();break;
             case 2: mino = new Mino_T();break;
             case 3: mino = new Mino_cube();break;
         }
@@ -75,10 +74,50 @@ public class PlayManager {
             currentMino.setXY(MINO_START_X, MINO_START_Y);
             nextMino = generateRandomMino();
             nextMino.setXY(NEXTMINO_START_X, NEXTMINO_START_Y);
+
+            // check if we can delete the minos here
+            checkDelete();
         } else {
             currentMino.update();
         }
     }
+
+    public void checkDelete() {
+        System.out.println("del?");
+        int x = left_x;
+        int y = top_y;
+        int blockCount = 0;
+
+        while (x < right_x && y < bottom_y) {
+            for (int i = 0; i < staticBlocks.size() ; i++) {
+                if (staticBlocks.get(i).x == x && staticBlocks.get(i).y == y) {
+                    blockCount++;
+                }
+            }
+            x += Block.SIZE;
+            if (x == right_x) {
+                if (blockCount == 12) {
+                    // row is filled with static blocks -> we can delete the line
+                    for (int i = staticBlocks.size() - 1; i > -1; i--) {
+                        if (staticBlocks.get(i).y == y) {
+                            staticBlocks.remove(i);
+                        }
+                    }
+
+                    // pulling down the minos above the y line by one block size to fill in the space of the removed line
+                    for (int i = 0; i < staticBlocks.size() ; i++) {
+                        if (staticBlocks.get(i).y < y) {
+                            staticBlocks.get(i).y += Block.SIZE;
+                        }
+                    }
+                }
+                x = left_x;
+                y += Block.SIZE;
+                blockCount = 0;
+            }
+        }
+    }
+
     public void draw(Graphics2D g2) {
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(4f));
